@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Country Explorer</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">WDD 330 Final Project</p>
+        <h1>Country Explorer</h1>
+        <p class="hero-copy">
+          Search for countries and explore key details in a clean, friendly
+          interface.
+        </p>
+      </header>
+
+      <main class="app-card">
+        <section class="search-section" aria-label="Country search">
+          <label class="search-label" for="country-search">Find a country</label>
+          <div class="search-controls">
+            <input
+              id="country-search"
+              name="country-search"
+              type="text"
+              placeholder="Search by country name"
+              aria-label="Search for a country"
+            />
+            <button type="button">Search</button>
+          </div>
+        </section>
+
+        <section
+          class="results-section"
+          aria-label="Search results"
+        >
+          <div id="results" class="results-container"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
+</html>
