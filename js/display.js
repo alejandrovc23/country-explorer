@@ -19,6 +19,9 @@ export function displayCountries(countries) {
     const flagUrl = country.flags?.png ?? country.flags?.svg ?? "";
     const flagAlt = country.flags?.alt ?? `${countryName} flag`;
 
+    countryCard.dataset.countryCode = countryCode;
+    countryCard.tabIndex = 0;
+
     countryCard.innerHTML = `
       <img class="country-flag" src="${flagUrl}" alt="${flagAlt}">
       <div class="country-card-content">
@@ -26,7 +29,7 @@ export function displayCountries(countries) {
         <p><strong>Region:</strong> ${region}</p>
         <p><strong>Capital:</strong> ${capital}</p>
         <p><strong>Population:</strong> ${population}</p>
-        <button type="button" class="favorite-button" data-country-code="${countryCode}">⭐ Add to Favorites</button>
+        <button type="button" class="favorite-button" data-country-code="${countryCode}">&#11088; Add to Favorites</button>
       </div>
     `;
 

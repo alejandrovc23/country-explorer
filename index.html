@@ -46,6 +46,20 @@
     </main>
   </div>
 
+  <div id="countryModal" class="modal" aria-hidden="true">
+    <div class="modal-overlay" data-close-modal="true"></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalCountryName">
+      <button type="button" class="modal-close" id="closeModalButton" aria-label="Close country details modal">x</button>
+      <img id="modalFlag" class="modal-flag" src="" alt="" />
+      <div class="modal-body">
+        <h2 id="modalCountryName">Country Name</h2>
+        <p><strong>Capital:</strong> <span id="modalCapital"></span></p>
+        <p><strong>Region:</strong> <span id="modalRegion"></span></p>
+        <p><strong>Population:</strong> <span id="modalPopulation"></span></p>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="/js/main.js"></script>
 </body>
 
