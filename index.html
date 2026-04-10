@@ -22,6 +22,16 @@
 
     <main class="app-card">
       <section class="search-section" aria-label="Country search">
+        <label class="search-label" for="regionFilter">Filter by region</label>
+        <select id="regionFilter" name="regionFilter" class="region-filter" aria-label="Filter countries by region">
+          <option value="all">All Regions</option>
+          <option value="africa">Africa</option>
+          <option value="americas">Americas</option>
+          <option value="asia">Asia</option>
+          <option value="europe">Europe</option>
+          <option value="oceania">Oceania</option>
+        </select>
+
         <label class="search-label" for="country-search">Find a country</label>
         <div class="search-controls">
           <input id="country-search" name="country-search" type="text" placeholder="Search by country name"
