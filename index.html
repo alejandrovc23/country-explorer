@@ -12,47 +12,72 @@
 <body>
   <div class="page-shell">
     <header class="hero">
-      <p class="eyebrow">WDD 330 Final Project</p>
-      <h1>Country Explorer</h1>
-      <p class="hero-copy">
-        Search for countries and explore key details in a clean, friendly
-        interface.
-      </p>
+      <div class="hero-topbar">
+        <div>
+          <p class="eyebrow">WDD 330 Final Project</p>
+          <h1>Country Explorer</h1>
+          <p class="hero-copy">
+            Explore countries, save favorites, review live weather, and navigate a modern interactive UI.
+          </p>
+        </div>
+        <button type="button" id="darkModeToggle">Dark Mode</button>
+      </div>
     </header>
 
     <main class="app-card">
       <section class="search-section" aria-label="Country search">
-        <label class="search-label" for="regionFilter">Filter by region</label>
-        <select id="regionFilter" name="regionFilter" class="region-filter" aria-label="Filter countries by region">
-          <option value="all">All Regions</option>
-          <option value="africa">Africa</option>
-          <option value="americas">Americas</option>
-          <option value="asia">Asia</option>
-          <option value="europe">Europe</option>
-          <option value="oceania">Oceania</option>
-        </select>
+        <form id="searchForm">
+          <label class="search-label" for="regionFilter">Filter by region</label>
+          <select id="regionFilter" name="regionFilter" class="region-filter" aria-label="Filter countries by region">
+            <option value="all">All Regions</option>
+            <option value="africa">Africa</option>
+            <option value="americas">Americas</option>
+            <option value="asia">Asia</option>
+            <option value="europe">Europe</option>
+            <option value="oceania">Oceania</option>
+          </select>
 
-        <label class="search-label" for="country-search">Find a country</label>
-        <div class="search-controls">
-          <input id="country-search" name="country-search" type="text" placeholder="Search by country name"
-            aria-label="Search for a country" />
-          <button type="button">Search</button>
-        </div>
+          <label class="search-label" for="country-search">Find a country</label>
+          <div class="search-controls">
+            <input id="country-search" name="country-search" type="text" placeholder="Search by country name"
+              aria-label="Search for a country" />
+            <button type="submit">Search</button>
+          </div>
+        </form>
       </section>
 
       <section class="favorites-section" aria-label="Favorite countries">
-        <h2>Favorite Countries</h2>
+        <h2>&#11088; Favorite Countries</h2>
         <div id="favoritesContainer" class="favorites-grid"></div>
       </section>
 
+      <section class="recent-section" aria-label="Recently viewed countries">
+        <h2>Recently Viewed</h2>
+        <div id="recentCountries" class="recent-list"></div>
+      </section>
+
       <section class="results-section" aria-label="Search results">
-        <label class="search-label" for="sortSelect">Sort By</label>
-        <select id="sortSelect" name="sortSelect" class="region-filter" aria-label="Sort countries">
-          <option value="name">Name (A-Z)</option>
-          <option value="population">Population (High to Low)</option>
-        </select>
-        <div id="loading" hidden>Loading countries...</div>
+        <div class="results-toolbar">
+          <div>
+            <label class="search-label" for="sortSelect">Sort By</label>
+            <select id="sortSelect" name="sortSelect" class="region-filter" aria-label="Sort countries">
+              <option value="name">Name (A-Z)</option>
+              <option value="population">Population (High to Low)</option>
+            </select>
+          </div>
+          <p id="hoverStatus" class="hover-status">Hover over a country card to preview it.</p>
+        </div>
+
+        <div id="loadingSpinner" hidden>Loading countries...</div>
+        <div id="errorMessage" class="status-message error-message" hidden></div>
+        <div id="noResultsMessage" class="status-message" hidden>No countries found.</div>
         <div id="results" class="results-container"></div>
+
+        <div class="pagination" id="paginationControls">
+          <button type="button" id="previousPageButton">Previous</button>
+          <span id="paginationLabel">Page 1 of 1</span>
+          <button type="button" id="nextPageButton">Next</button>
+        </div>
       </section>
     </main>
   </div>
@@ -67,7 +92,17 @@
         <h2 id="modalCountryName">Country Name</h2>
         <p><strong>Capital:</strong> <span id="modalCapital"></span></p>
         <p><strong>Region:</strong> <span id="modalRegion"></span></p>
+        <p><strong>Subregion:</strong> <span id="modalSubregion"></span></p>
         <p><strong>Population:</strong> <span id="modalPopulation"></span></p>
+        <p><strong>Area:</strong> <span id="modalArea"></span></p>
+        <p><strong>Languages:</strong> <span id="modalLanguages"></span></p>
+        <p><strong>Currencies:</strong> <span id="modalCurrencies"></span></p>
+        <div class="modal-weather">
+          <h3 id="modalWeatherHeading">Weather</h3>
+          <p id="modalWeatherStatus">Weather data unavailable</p>
+          <p><strong>Temperature:</strong> <span id="modalTemperature">--</span></p>
+          <p><strong>Wind Speed:</strong> <span id="modalWindSpeed">--</span></p>
+        </div>
       </div>
     </div>
   </div>

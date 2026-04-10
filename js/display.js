@@ -8,18 +8,18 @@ export function renderCountryCards(container, countries, options = {}) {
     return;
   }
 
-  const { showFavoriteButton = true } = options;
+  const { showFavoriteButton = true, showRemoveButton = false } = options;
 
   container.innerHTML = "";
 
   countries.forEach((country) => {
-    const countryCard = createCountryCard(country, { showFavoriteButton });
+    const countryCard = createCountryCard(country, { showFavoriteButton, showRemoveButton });
     container.appendChild(countryCard);
   });
 }
 
 function createCountryCard(country, options = {}) {
-  const { showFavoriteButton = true } = options;
+  const { showFavoriteButton = true, showRemoveButton = false } = options;
   const countryCard = document.createElement("article");
   countryCard.className = "country-card";
 
@@ -33,8 +33,12 @@ function createCountryCard(country, options = {}) {
   const favoriteButtonMarkup = showFavoriteButton
     ? `<button type="button" class="favorite-button" data-country-code="${countryCode}">&#11088; Add to Favorites</button>`
     : "";
+  const removeButtonMarkup = showRemoveButton
+    ? `<button type="button" class="remove-favorite" data-country-name="${countryName}">Remove</button>`
+    : "";
 
   countryCard.dataset.countryCode = countryCode;
+  countryCard.dataset.countryName = countryName;
   countryCard.tabIndex = 0;
 
   countryCard.innerHTML = `
@@ -45,6 +49,7 @@ function createCountryCard(country, options = {}) {
       <p><strong>Capital:</strong> ${capital}</p>
       <p><strong>Population:</strong> ${population}</p>
       ${favoriteButtonMarkup}
+      ${removeButtonMarkup}
     </div>
   `;
 
