@@ -10,6 +10,7 @@ const searchInput = document.querySelector("#country-search");
 const searchButton = document.querySelector(".search-controls button");
 const regionFilter = document.querySelector("#regionFilter");
 const sortSelect = document.querySelector("#sortSelect");
+const loadingElement = document.querySelector("#loading");
 const resultsContainer = document.querySelector("#results");
 const countryModal = document.querySelector("#countryModal");
 const closeModalButton = document.querySelector("#closeModalButton");
@@ -24,11 +25,17 @@ let allCountries = [];
 loadCountries();
 
 async function loadCountries() {
-  const countries = await getAllCountries();
-  console.log(countries);
+  showLoading();
 
-  allCountries = countries ?? [];
-  applyFilters();
+  try {
+    const countries = await getAllCountries();
+    console.log(countries);
+
+    allCountries = countries ?? [];
+    applyFilters();
+  } finally {
+    hideLoading();
+  }
 }
 
 searchButton?.addEventListener("click", applyFilters);
@@ -49,6 +56,16 @@ function applyFilters() {
   const sortedCountries = sortCountries(filteredCountries, selectedSortOption);
 
   displayCountries(sortedCountries);
+}
+
+function showLoading() {
+  loadingElement?.removeAttribute("hidden");
+  resultsContainer?.setAttribute("hidden", "");
+}
+
+function hideLoading() {
+  loadingElement?.setAttribute("hidden", "");
+  resultsContainer?.removeAttribute("hidden");
 }
 
 function handleResultsClick(event) {
