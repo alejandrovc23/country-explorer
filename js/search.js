@@ -17,3 +17,20 @@ export function filterByRegion(countries, region) {
     (country) => country.region?.toLowerCase() === normalizedRegion
   );
 }
+
+export function sortCountries(countries, option) {
+  const countriesToSort = [...countries];
+
+  if (option === "population") {
+    return countriesToSort.sort(
+      (firstCountry, secondCountry) =>
+        (secondCountry.population ?? 0) - (firstCountry.population ?? 0)
+    );
+  }
+
+  return countriesToSort.sort((firstCountry, secondCountry) =>
+    (firstCountry.name?.common ?? "").localeCompare(
+      secondCountry.name?.common ?? ""
+    )
+  );
+}

@@ -1,7 +1,7 @@
 import { getAllCountries } from "./api.js";
-import { displayCountries } from "./display.js";
+import { attachFlagFallback, displayCountries, getCountryFlagUrls } from "./display.js";
 import { addToFavorites } from "./favorites.js";
-import { filterByRegion, searchCountries } from "./search.js";
+import { filterByRegion, searchCountries, sortCountries } from "./search.js";
 import { getFavorites } from "./storage.js";
 
 console.log("Country Explorer initialized");
@@ -9,6 +9,7 @@ console.log("Country Explorer initialized");
 const searchInput = document.querySelector("#country-search");
 const searchButton = document.querySelector(".search-controls button");
 const regionFilter = document.querySelector("#regionFilter");
+const sortSelect = document.querySelector("#sortSelect");
 const resultsContainer = document.querySelector("#results");
 const countryModal = document.querySelector("#countryModal");
 const closeModalButton = document.querySelector("#closeModalButton");
@@ -33,6 +34,7 @@ async function loadCountries() {
 searchButton?.addEventListener("click", applyFilters);
 searchInput?.addEventListener("input", applyFilters);
 regionFilter?.addEventListener("change", applyFilters);
+sortSelect?.addEventListener("change", applyFilters);
 resultsContainer?.addEventListener("click", handleResultsClick);
 closeModalButton?.addEventListener("click", closeCountryModal);
 countryModal?.addEventListener("click", handleModalClick);
@@ -41,9 +43,12 @@ document.addEventListener("keydown", handleDocumentKeydown);
 function applyFilters() {
   const query = searchInput?.value ?? "";
   const selectedRegion = regionFilter?.value ?? "all";
+  const selectedSortOption = sortSelect?.value ?? "name";
   const countriesByRegion = filterByRegion(allCountries, selectedRegion);
   const filteredCountries = searchCountries(countriesByRegion, query);
-  displayCountries(filteredCountries);
+  const sortedCountries = sortCountries(filteredCountries, selectedSortOption);
+
+  displayCountries(sortedCountries);
 }
 
 function handleResultsClick(event) {
@@ -108,11 +113,12 @@ function openCountryModal(country) {
   const capital = country.capital?.[0] ?? "No capital listed";
   const region = country.region ?? "Unknown region";
   const population = country.population?.toLocaleString() ?? "Unknown population";
-  const flagUrl = country.flags?.png ?? country.flags?.svg ?? "";
+  const { primaryFlagUrl, fallbackFlagUrl } = getCountryFlagUrls(country);
   const flagAlt = country.flags?.alt ?? `${countryName} flag`;
 
-  modalFlag.src = flagUrl;
+  modalFlag.src = primaryFlagUrl;
   modalFlag.alt = flagAlt;
+  attachFlagFallback(modalFlag, fallbackFlagUrl);
   modalCountryName.textContent = countryName;
   modalCapital.textContent = capital;
   modalRegion.textContent = region;
