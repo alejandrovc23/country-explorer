@@ -10,6 +10,13 @@ const searchInput = document.querySelector("#country-search");
 const searchButton = document.querySelector(".search-controls button");
 const regionFilter = document.querySelector("#regionFilter");
 const resultsContainer = document.querySelector("#results");
+const countryModal = document.querySelector("#countryModal");
+const closeModalButton = document.querySelector("#closeModalButton");
+const modalFlag = document.querySelector("#modalFlag");
+const modalCountryName = document.querySelector("#modalCountryName");
+const modalCapital = document.querySelector("#modalCapital");
+const modalRegion = document.querySelector("#modalRegion");
+const modalPopulation = document.querySelector("#modalPopulation");
 
 let allCountries = [];
 
@@ -26,7 +33,10 @@ async function loadCountries() {
 searchButton?.addEventListener("click", applyFilters);
 searchInput?.addEventListener("input", applyFilters);
 regionFilter?.addEventListener("change", applyFilters);
-resultsContainer?.addEventListener("click", handleFavoriteClick);
+resultsContainer?.addEventListener("click", handleResultsClick);
+closeModalButton?.addEventListener("click", closeCountryModal);
+countryModal?.addEventListener("click", handleModalClick);
+document.addEventListener("keydown", handleDocumentKeydown);
 
 function applyFilters() {
   const query = searchInput?.value ?? "";
@@ -36,17 +46,33 @@ function applyFilters() {
   displayCountries(filteredCountries);
 }
 
-function handleFavoriteClick(event) {
+function handleResultsClick(event) {
   const favoriteButton = event.target.closest(".favorite-button");
 
-  if (!favoriteButton) {
+  if (favoriteButton) {
+    handleFavoriteClick(favoriteButton);
     return;
   }
 
+  const countryCard = event.target.closest(".country-card");
+
+  if (!countryCard) {
+    return;
+  }
+
+  const countryCode = countryCard.dataset.countryCode;
+  const selectedCountry = findCountryByCode(countryCode);
+
+  if (!selectedCountry) {
+    return;
+  }
+
+  openCountryModal(selectedCountry);
+}
+
+function handleFavoriteClick(favoriteButton) {
   const countryCode = favoriteButton.dataset.countryCode;
-  const selectedCountry = allCountries.find(
-    (country) => (country.cca3 ?? country.name?.common) === countryCode
-  );
+  const selectedCountry = findCountryByCode(countryCode);
 
   if (!selectedCountry) {
     return;
@@ -54,4 +80,66 @@ function handleFavoriteClick(event) {
 
   addToFavorites(selectedCountry);
   console.log("Favorites:", getFavorites());
+}
+
+function findCountryByCode(countryCode) {
+  if (!countryCode) {
+    return null;
+  }
+
+  return allCountries.find(
+    (country) => (country.cca3 ?? country.name?.common) === countryCode
+  );
+}
+
+function openCountryModal(country) {
+  if (
+    !countryModal ||
+    !modalFlag ||
+    !modalCountryName ||
+    !modalCapital ||
+    !modalRegion ||
+    !modalPopulation
+  ) {
+    return;
+  }
+
+  const countryName = country.name?.common ?? "Unknown country";
+  const capital = country.capital?.[0] ?? "No capital listed";
+  const region = country.region ?? "Unknown region";
+  const population = country.population?.toLocaleString() ?? "Unknown population";
+  const flagUrl = country.flags?.png ?? country.flags?.svg ?? "";
+  const flagAlt = country.flags?.alt ?? `${countryName} flag`;
+
+  modalFlag.src = flagUrl;
+  modalFlag.alt = flagAlt;
+  modalCountryName.textContent = countryName;
+  modalCapital.textContent = capital;
+  modalRegion.textContent = region;
+  modalPopulation.textContent = population;
+  countryModal.classList.add("is-open");
+  countryModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeCountryModal() {
+  if (!countryModal) {
+    return;
+  }
+
+  countryModal.classList.remove("is-open");
+  countryModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+function handleModalClick(event) {
+  if (event.target instanceof Element && event.target.matches("[data-close-modal='true']")) {
+    closeCountryModal();
+  }
+}
+
+function handleDocumentKeydown(event) {
+  if (event.key === "Escape") {
+    closeCountryModal();
+  }
 }
