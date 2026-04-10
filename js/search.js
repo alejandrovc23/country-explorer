@@ -5,3 +5,15 @@ export function searchCountries(countries, query) {
     country.name.common.toLowerCase().includes(normalizedQuery)
   );
 }
+
+export function filterByRegion(countries, region) {
+  const normalizedRegion = region.toLowerCase().trim();
+
+  if (normalizedRegion === "all") {
+    return countries;
+  }
+
+  return countries.filter(
+    (country) => country.region?.toLowerCase() === normalizedRegion
+  );
+}
