@@ -11,6 +11,7 @@ export function displayCountries(countries) {
     const countryCard = document.createElement("article");
     countryCard.className = "country-card";
 
+    const countryCode = country.cca3 ?? country.name?.common ?? "";
     const countryName = country.name?.common ?? "Unknown country";
     const region = country.region ?? "Unknown region";
     const capital = country.capital?.[0] ?? "No capital listed";
@@ -25,6 +26,7 @@ export function displayCountries(countries) {
         <p><strong>Region:</strong> ${region}</p>
         <p><strong>Capital:</strong> ${capital}</p>
         <p><strong>Population:</strong> ${population}</p>
+        <button type="button" class="favorite-button" data-country-code="${countryCode}">⭐ Add to Favorites</button>
       </div>
     `;
 
