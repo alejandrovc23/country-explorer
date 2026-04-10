@@ -1,6 +1,6 @@
 import { getAllCountries } from "./api.js";
 import { attachFlagFallback, displayCountries, getCountryFlagUrls } from "./display.js";
-import { addToFavorites } from "./favorites.js";
+import { addToFavorites, displayFavorites } from "./favorites.js";
 import { filterByRegion, searchCountries, sortCountries } from "./search.js";
 import { getFavorites } from "./storage.js";
 
@@ -11,6 +11,7 @@ const searchButton = document.querySelector(".search-controls button");
 const regionFilter = document.querySelector("#regionFilter");
 const sortSelect = document.querySelector("#sortSelect");
 const loadingElement = document.querySelector("#loading");
+const favoritesContainer = document.querySelector("#favoritesContainer");
 const resultsContainer = document.querySelector("#results");
 const countryModal = document.querySelector("#countryModal");
 const closeModalButton = document.querySelector("#closeModalButton");
@@ -22,6 +23,7 @@ const modalPopulation = document.querySelector("#modalPopulation");
 
 let allCountries = [];
 
+displayFavorites();
 loadCountries();
 
 async function loadCountries() {
@@ -43,6 +45,7 @@ searchInput?.addEventListener("input", applyFilters);
 regionFilter?.addEventListener("change", applyFilters);
 sortSelect?.addEventListener("change", applyFilters);
 resultsContainer?.addEventListener("click", handleResultsClick);
+favoritesContainer?.addEventListener("click", handleFavoritesClick);
 closeModalButton?.addEventListener("click", closeCountryModal);
 countryModal?.addEventListener("click", handleModalClick);
 document.addEventListener("keydown", handleDocumentKeydown);
@@ -101,7 +104,25 @@ function handleFavoriteClick(favoriteButton) {
   }
 
   addToFavorites(selectedCountry);
+  displayFavorites();
   console.log("Favorites:", getFavorites());
+}
+
+function handleFavoritesClick(event) {
+  const countryCard = event.target.closest(".country-card");
+
+  if (!countryCard) {
+    return;
+  }
+
+  const countryCode = countryCard.dataset.countryCode;
+  const selectedCountry = findFavoriteByCode(countryCode);
+
+  if (!selectedCountry) {
+    return;
+  }
+
+  openCountryModal(selectedCountry);
 }
 
 function findCountryByCode(countryCode) {
@@ -110,6 +131,16 @@ function findCountryByCode(countryCode) {
   }
 
   return allCountries.find(
+    (country) => (country.cca3 ?? country.name?.common) === countryCode
+  );
+}
+
+function findFavoriteByCode(countryCode) {
+  if (!countryCode) {
+    return null;
+  }
+
+  return getFavorites().find(
     (country) => (country.cca3 ?? country.name?.common) === countryCode
   );
 }

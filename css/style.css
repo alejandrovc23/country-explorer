@@ -91,6 +91,15 @@ button {
   margin-bottom: 2.25rem;
 }
 
+.favorites-section {
+  margin-bottom: 2.5rem;
+}
+
+.favorites-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.45rem;
+}
+
 .search-label {
   display: inline-block;
   margin-bottom: 0.9rem;
@@ -197,6 +206,27 @@ button {
 
 #loading[hidden] {
   display: none;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+.favorites-grid:empty::before {
+  content: "No favorites saved yet.";
+  display: block;
+  padding: 1.25rem;
+  border: 2px dashed rgba(37, 182, 255, 0.25);
+  border-radius: 20px;
+  text-align: center;
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.favorites-grid .country-card {
+  box-shadow: 0 12px 24px rgba(59, 87, 122, 0.1);
 }
 
 .results-container {
@@ -381,6 +411,10 @@ button {
   .results-container {
     padding: 1rem;
     gap: 1rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: 1fr;
   }
 
   .modal-content {
